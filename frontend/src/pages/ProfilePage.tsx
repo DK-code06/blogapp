@@ -78,7 +78,8 @@ const ProfilePage = () => {
   );
   if (!profile) return null;
 
-  const avatarSrc = avatarPreview || (profile.avatar ? `http://localhost:5000${profile.avatar}` : '');
+  // Fixed: use cloudinary URL directly, no localhost prefix
+  const avatarSrc = avatarPreview || profile.avatar || '';
 
   return (
     <div style={{ 
@@ -87,14 +88,11 @@ const ProfilePage = () => {
       margin: '0 auto', 
       padding: 'clamp(16px, 4vw, 32px) clamp(12px, 3vw, 20px)' 
     }}>
-      {/* Profile header card */}
       <div style={{ background: 'var(--surface)', borderRadius: 24, border: '1px solid var(--border)', overflow: 'hidden', marginBottom: 24, animation: 'fadeIn 0.4s ease' }}>
-        {/* Banner */}
         <div style={{ height: 120, background: 'linear-gradient(135deg, var(--accent3), var(--bg3), var(--pink))', backgroundSize: '200% 200%', animation: 'gradientShift 8s ease infinite', opacity: 0.6 }} />
 
         <div style={{ padding: '0 24px 24px', marginTop: -36 }}>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 16 }}>
-            {/* Avatar */}
             <div style={{ position: 'relative' }}>
               <div style={{
                 width: 80, height: 80, borderRadius: '50%', background: 'var(--accent3)',
@@ -114,7 +112,6 @@ const ProfilePage = () => {
               )}
             </div>
 
-            {/* Actions */}
             <div style={{ display: 'flex', gap: 8 }}>
               {isMe ? (
                 <button onClick={() => setEditing(!editing)} style={{
@@ -138,7 +135,6 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          {/* Edit form */}
           {isMe && editing ? (
             <form onSubmit={handleSaveProfile} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               <input value={editForm.username} onChange={e => setEditForm(p => ({ ...p, username: e.target.value }))}
@@ -158,7 +154,6 @@ const ProfilePage = () => {
             </div>
           )}
 
-          {/* Stats */}
           <div style={{ display: 'flex', gap: 24, marginTop: 16 }}>
             {[
               { label: 'Posts', val: posts.length, action: () => setTab('posts') },
@@ -174,7 +169,6 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Tabs */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 20, borderBottom: '1px solid var(--border)', paddingBottom: 0 }}>
         {(['posts', 'followers', 'following'] as const).map(t => (
           <button key={t} onClick={() => setTab(t)} style={{
@@ -188,7 +182,6 @@ const ProfilePage = () => {
         ))}
       </div>
 
-      {/* Content */}
       {tab === 'posts' && (
         posts.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text3)' }}>
@@ -217,7 +210,8 @@ const ProfilePage = () => {
               style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderRadius: 14, background: 'var(--surface)', border: '1px solid var(--border)', cursor: 'pointer', transition: 'all 0.2s' }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--border2)'}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'}>
-              <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'var(--accent3)', backgroundImage: u.avatar ? `url(http://localhost:5000${u.avatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 700, color: 'white', flexShrink: 0 }}>
+              {/* Fixed: removed localhost:5000 prefix */}
+              <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'var(--accent3)', backgroundImage: u.avatar ? `url(${u.avatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 700, color: 'white', flexShrink: 0 }}>
                 {!u.avatar && (u.username?.[0]?.toUpperCase() || '?')}
               </div>
               <div>

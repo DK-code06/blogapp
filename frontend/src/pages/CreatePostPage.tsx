@@ -19,7 +19,7 @@ const CreatePostPage = () => {
     if (!isEdit) return;
     postAPI.getOne(id!).then(({ data }) => {
       setForm({ title: data.title, content: data.content, tags: data.tags?.join(', ') || '' });
-      if (data.image) setExistingImage(`http://localhost:5000${data.image}`);
+      if (data.image) setExistingImage(data.image);
     }).catch(() => navigate('/'));
   }, [id]);
 
@@ -47,7 +47,7 @@ const CreatePostPage = () => {
       const tags = form.tags.split(',').map(t => t.trim()).filter(Boolean);
       fd.append('tags', JSON.stringify(tags));
       if (image) fd.append('image', image);
-      if (isEdit && existingImage && !image) fd.append('image', existingImage.replace('http://localhost:5000', ''));
+      if (isEdit && existingImage && !image) fd.append('image', existingImage);
       if (isEdit) { const { data } = await postAPI.update(id!, fd); navigate(`/post/${data._id}`); }
       else { const { data } = await postAPI.create(fd); navigate(`/post/${data._id}`); }
     } catch (err: any) {

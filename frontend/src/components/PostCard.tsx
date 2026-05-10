@@ -7,7 +7,7 @@ import { Post } from '../types';
 const Avatar = ({ user, size = 36 }: { user: any; size?: number }) => (
   <div style={{
     width: size, height: size, borderRadius: '50%', background: 'var(--accent3)', flexShrink: 0,
-    backgroundImage: user?.avatar ? `url(http://localhost:5000${user.avatar})` : 'none',
+    backgroundImage: user?.avatar ? `url(${user.avatar})` : 'none',
     backgroundSize: 'cover', backgroundPosition: 'center',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     fontSize: size * 0.38, fontWeight: 700, color: 'white', border: '2px solid var(--border2)'
@@ -108,7 +108,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete, onUpdate }) => {
       {post.image && (
         <div style={{ margin: '12px 0', overflow: 'hidden', cursor: 'pointer' }}
           onClick={() => navigate(`/post/${post._id}`)}>
-          <img src={`http://localhost:5000${post.image}`} alt={post.title}
+          <img src={post.image} alt={post.title}
             style={{ width: '100%', maxHeight: 400, objectFit: 'cover', display: 'block', transition: 'transform 0.4s' }}
             onMouseEnter={e => (e.currentTarget as HTMLImageElement).style.transform = 'scale(1.02)'}
             onMouseLeave={e => (e.currentTarget as HTMLImageElement).style.transform = 'scale(1)'}
