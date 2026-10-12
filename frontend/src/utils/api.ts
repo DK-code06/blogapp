@@ -1,7 +1,13 @@
 import axios from 'axios';
 
+const getBaseURL = () => {
+  const url = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5000/api';
+  const cleanUrl = url.replace(/\/+$/, '');
+  return cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
+};
+
 const API = axios.create({ 
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api' 
+  baseURL: getBaseURL() 
 });
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
